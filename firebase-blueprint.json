@@ -1,0 +1,20 @@
+{
+  "entities": {
+    "Person": {
+      "title": "Person",
+      "description": "Information about a person, including their name and face image storage reference.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "faceImageURL": { "type": "string" }
+      },
+      "required": ["name", "faceImageURL"]
+    }
+  },
+  "firestore": {
+    "people/{personId}": {
+      "schema": "Person",
+      "description": "Collection of authorized persons for facial recognition."
+    }
+  }
+}

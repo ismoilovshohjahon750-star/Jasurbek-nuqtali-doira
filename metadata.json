@@ -1,0 +1,12 @@
+{
+  "name": "Jasurbekni qishloq ishni versiyasi🤣",
+  "description": "Real vaqt rejimida ishlaydigan ovozli muloqot bot (Voice AI Chatbot powered by Gemini)",
+  "requestFramePermissions": [
+    "microphone",
+    "camera",
+    "geolocation"
+  ],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

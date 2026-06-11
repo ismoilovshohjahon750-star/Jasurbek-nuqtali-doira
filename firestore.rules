@@ -1,0 +1,39 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global safety net - Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Global helper primitives
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Schema and input validator for face recognition profiles
+    function isValidPerson(data) {
+      return data.keys().hasAll(['name', 'faceImageURL'])
+        && data.keys().size() == 2
+        && data.name is string
+        && data.name.size() > 0
+        && data.name.size() <= 128
+        && data.faceImageURL is string
+        && data.faceImageURL.size() > 0
+        && data.faceImageURL.size() <= 600000;
+    }
+
+    // Face Recognition Directory Rule block
+    match /people/{personId} {
+      allow read: if true; // Open read for biometrics face scanner to work for guest users
+      allow create: if isValidId(personId) && isValidPerson(request.resource.data);
+      allow update: if isValidId(personId) && isValidPerson(request.resource.data);
+      allow delete: if isValidId(personId);
+    }
+  }
+}
