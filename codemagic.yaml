@@ -10,14 +10,9 @@ workflows:
         script: npm install
       - name: Set executable permissions
         script: chmod +x android/gradlew
-      - name: Setup Gradle Wrapper
-        script: |
-          cd android
-          rm -rf gradle/wrapper/gradle-wrapper.jar
-          gradle wrapper
       - name: Build Android APK
         script: |
           cd android
-          ./gradlew assembleDebug
+          gradle assembleDebug
     artifacts:
       - android/app/build/outputs/apk/debug/*.apk
