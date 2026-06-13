@@ -9,6 +9,10 @@ import dotenv from "dotenv";
 // Load environment variables
 dotenv.config();
 
+process.env.GEMINI_API_KEY = "AIzaSyAwnrFhvTyitAR5W9aOhJTa_vOwkK-Weqo";
+process.env.GROQ_API_KEY = "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";
+process.env.OPENROUTER_API_KEY = "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";
+
 const app = express();
 const httpServer = http.createServer(app);
 const PORT = 3000;
