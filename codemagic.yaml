@@ -4,7 +4,7 @@ workflows:
     instance_type: mac_mini_m1
     environment:
       node: 18
-      java: 17
+      java: 21
     scripts:
       - name: Install dependencies
         script: npm install
@@ -13,6 +13,6 @@ workflows:
       - name: Build Android APK
         script: |
           cd android
-          gradle assembleDebug
+          ./gradlew clean assembleDebug
     artifacts:
       - android/app/build/outputs/apk/debug/*.apk
