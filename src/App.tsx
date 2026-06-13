@@ -1694,6 +1694,19 @@ export default function App() {
         }
       };
 
+      ws.onerror = (error) => {
+        console.error("WebSocket Error:", error);
+        addLog("Ulanish xatosi: Serverga ulanib bo'lmadi.");
+        setLiveState("idle");
+      };
+
+      ws.onclose = () => {
+        if (liveState === "connected") {
+          addLog("Server bilan aloqa uzildi.");
+          setLiveState("idle");
+        }
+      };
+
       ws.onmessage = (event) => {
         try {
           const parsed: LiveMessage = JSON.parse(event.data);
