@@ -13,7 +13,8 @@ workflows:
       - name: Setup Gradle Wrapper
         script: |
           cd android
-          ./gradlew wrapper
+          rm -rf gradle/wrapper/gradle-wrapper.jar
+          gradle wrapper
       - name: Build Android APK
         script: |
           cd android
