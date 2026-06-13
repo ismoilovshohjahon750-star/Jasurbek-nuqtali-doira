@@ -155,6 +155,22 @@ export function handleFirestoreError(error: unknown, operationType: OperationTyp
   throw new Error(JSON.stringify(errInfo));
 }
 
+// Detect if running within Capacitor or standard hybrid WebView
+export const getApiBaseUrl = (): string => {
+  const customBackend = (import.meta as any).env.VITE_BACKEND_URL;
+  if (customBackend) return customBackend;
+  const isCapacitorOrWebView = 
+    (window as any).Capacitor || 
+    window.location.protocol === "capacitor:" || 
+    window.location.protocol === "http-capacitor:" ||
+    (window.location.hostname === "localhost" && window.location.port === "");
+  
+  if (isCapacitorOrWebView) {
+    return "https://ais-pre-tqd66ygaxypptbaykii7hx-81519814201.asia-southeast1.run.app";
+  }
+  return "";
+};
+
 export default function App() {
   const [lang, setLang] = useState<"uz" | "en">("uz");
   const t = LOCATIONS[lang];
@@ -570,7 +586,7 @@ export default function App() {
 
   // Check API Key on startup passively via the secure config endpoint and start telemetry intervals
   useEffect(() => {
-    fetch("/api/config")
+    fetch(getApiBaseUrl() + "/api/config")
       .then((res) => res.json())
       .then((data) => {
         if (data && typeof data.apiKeyMissing === "boolean") {
@@ -732,7 +748,7 @@ export default function App() {
             text: m.text
           }));
 
-        const response = await fetch("/api/chat-voice", {
+        const response = await fetch(getApiBaseUrl() + "/api/chat-voice", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -825,7 +841,7 @@ export default function App() {
           text: m.text
         }));
 
-      const response = await fetch("/api/chat-voice", {
+      const response = await fetch(getApiBaseUrl() + "/api/chat-voice", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -958,7 +974,7 @@ export default function App() {
       }
       
       // Attempt to generate a beautiful Gemini high-fidelity voice instead of browser synthesis fallback
-      fetch("/api/generate-tts", {
+      fetch(getApiBaseUrl() + "/api/generate-tts", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: textToSpeak, voice: selectedVoice })
@@ -1222,7 +1238,7 @@ export default function App() {
     });
 
     try {
-      const response = await fetch("/api/chat-voice", {
+      const response = await fetch(getApiBaseUrl() + "/api/chat-voice", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -1606,7 +1622,17 @@ export default function App() {
       const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
       
       let wsUrl = "";
-      const customBackend = (import.meta as any).env.VITE_BACKEND_URL;
+      let customBackend = (import.meta as any).env.VITE_BACKEND_URL;
+      
+      const isCapacitorOrWebView = 
+        (window as any).Capacitor || 
+        window.location.protocol === "capacitor:" || 
+        window.location.protocol === "http-capacitor:" ||
+        (window.location.hostname === "localhost" && window.location.port === "");
+      
+      if (!customBackend && isCapacitorOrWebView) {
+        customBackend = "https://ais-pre-tqd66ygaxypptbaykii7hx-81519814201.asia-southeast1.run.app";
+      }
       
       if (customBackend) {
         if (customBackend.startsWith("ws://") || customBackend.startsWith("wss://")) {
@@ -1956,7 +1982,7 @@ export default function App() {
     setCheckingApiKey(true);
     setApiKeyCheckResult(null);
     try {
-      const res = await fetch("/api/debug-connection");
+      const res = await fetch(getApiBaseUrl() + "/api/debug-connection");
       const data = await res.json();
       if (res.ok && data.status === "success") {
         setApiKeyMissing(false);
