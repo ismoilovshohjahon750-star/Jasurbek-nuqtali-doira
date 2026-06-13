@@ -163,6 +163,7 @@ export const getApiBaseUrl = (): string => {
     (window as any).Capacitor || 
     window.location.protocol === "capacitor:" || 
     window.location.protocol === "http-capacitor:" ||
+    window.location.protocol === "file:" ||
     (window.location.hostname === "localhost" && window.location.port === "");
   
   if (isCapacitorOrWebView) {
@@ -1628,6 +1629,7 @@ export default function App() {
         (window as any).Capacitor || 
         window.location.protocol === "capacitor:" || 
         window.location.protocol === "http-capacitor:" ||
+        window.location.protocol === "file:" ||
         (window.location.hostname === "localhost" && window.location.port === "");
       
       if (!customBackend && isCapacitorOrWebView) {
