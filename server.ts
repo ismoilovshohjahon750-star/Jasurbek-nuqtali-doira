@@ -4,10 +4,6 @@ import path from "path";
 import { WebSocketServer, WebSocket } from "ws";
 import { GoogleGenAI, Type, Modality } from "@google/genai";
 import { createServer as createViteServer } from "vite";
-import dotenv from "dotenv";
-
-// Load environment variables
-dotenv.config();
 
 process.env.GEMINI_API_KEY = "AIzaSyAwnrFhvTyitAR5W9aOhJTa_vOwkK-Weqo";
 process.env.GROQ_API_KEY = "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";
