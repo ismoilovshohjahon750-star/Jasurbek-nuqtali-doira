@@ -2136,14 +2136,30 @@ export default function App() {
               {/* CHROME CORE */}
               <div className="relative flex flex-col items-center justify-center group/doppi">
 
-                {/* Placeholder for automatic connection */}
-                {liveState === "connecting" && (
-                  <div className="h-48 w-48 sm:h-56 sm:w-56 rounded-full flex items-center justify-center">
-                    <div className="animate-pulse text-[#00F2FF]/50 text-xs font-mono tracking-widest uppercase">
-                      {lang === "uz" ? "Ulanmoqda..." : "Connecting..."}
-                    </div>
+                {/* START LIVE ACTION */}
+                <button 
+                  onClick={startLiveMuloqot}
+                  className="relative flex flex-col items-center justify-center h-48 w-48 sm:h-56 sm:w-56 rounded-full bg-gradient-to-tr from-[#0b0b0f] to-[#121319] border border-white/10 hover:border-[#00F2FF]/50 shadow-lg hover:shadow-[0_0_35px_rgba(0,242,255,0.2)] transition-all duration-700 cursor-pointer focus:outline-none z-10 group"
+                  title={lang === "uz" ? "Muloqotni boshlash" : "Start Conversation"}
+                >
+                  {/* Visual Glass Shimmer Effect */}
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-t from-white/0 to-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                  {/* Inner energetic dashed ring */}
+                  <div className="absolute inset-2 rounded-full border border-dashed border-slate-800 transition-all duration-500 pointer-events-none" />
+
+                  {/* Glowing Orb Neural Heart */}
+                  <div className="absolute h-22 w-22 sm:h-26 sm:w-26 rounded-full transition-all duration-700 flex flex-col items-center justify-center pointer-events-none bg-radial from-purple-900/15 to-[#111115] opacity-50" />
+
+                  {/* Central Core Icon status */}
+                  <div className="z-20 text-center select-none px-4">
+                    <Play className="h-10 w-10 text-[#00F2FF] fill-[#00F2FF] mx-auto group-hover:scale-110 active:scale-95 transition-transform" />
+
+                    <p className="text-[10px] font-mono font-black tracking-[3px] uppercase text-white mt-3 text-shadow">
+                      {lang === "uz" ? "Xabarlashish" : "INITIALIZE"}
+                    </p>
                   </div>
-                )}
+                </button>
               </div>
             </div>
 
