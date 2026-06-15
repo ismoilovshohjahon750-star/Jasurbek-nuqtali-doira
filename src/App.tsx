@@ -667,13 +667,9 @@ export default function App() {
     };
   }, []);
 
-  // // Automatically connect on mount
+  // App mounted status
   useEffect(() => {
     console.log("DEBUG: App mounted, liveState is:", liveState);
-    if (liveState === "disconnected") {
-      console.log("DEBUG: Initiating automatic connection");
-      startLiveMuloqot();
-    }
   }, []);
 
   // -------------------------------------------------------------
@@ -1610,13 +1606,18 @@ export default function App() {
       audioContextRef.current = audioCtx;
       nextPlaybackTime.current = audioCtx.currentTime;
 
-      // 2. Open client microphone (Optionally handle permissions gracefully in iFrame sandbox context)
+      // 2. Open client microphone with safety timeout (Optionally handle permissions gracefully in iFrame sandbox context or hybrid APK)
       let micStream: MediaStream | null = null;
       try {
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
           throw new Error("Microphone API is not supported in this frame.");
         }
-        micStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        // Warm/safe getUserMedia with a 5-second timeout to prevent getting stuck in WebView/Capacitor
+        const getUserMediaPromise = navigator.mediaDevices.getUserMedia({ audio: true });
+        const timeoutPromise = new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error("Microphone permission timeout or blocked by system.")), 5000)
+        );
+        micStream = await Promise.race([getUserMediaPromise, timeoutPromise]);
         micStreamRef.current = micStream;
         setMicGranted(true);
       } catch (micErr: any) {
